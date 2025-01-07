@@ -85,7 +85,13 @@ public class Model {
      *  Empty spaces are stored as null.
      * */
     public boolean emptySpaceExists() {
-        // TODO: Task 1. Fill in this function.
+        for(int x = 0; x < size(); x++) {
+            for(int y = 0; y < size(); y++) {
+                if (tile(x, y) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -95,7 +101,15 @@ public class Model {
      * given a Tile object t, we get its value with t.value().
      */
     public boolean maxTileExists() {
-        // TODO: Task 2. Fill in this function.
+        for(int x = 0; x < size(); x++) {
+            for (int y = 0; y < size(); y++) {
+                if (tile(x, y) != null) {
+                    if (tile(x, y).value() == MAX_PIECE) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -106,7 +120,22 @@ public class Model {
      * 2. There are two adjacent tiles with the same value.
      */
     public boolean atLeastOneMoveExists() {
-        // TODO: Task 3. Fill in this function.
+        if (emptySpaceExists()) {
+            return true;
+        }else {
+            for(int x = 0; x < size(); x++) {
+                for(int y = 0; y < size(); y++) {
+                    if (tile(x, y) != null) {
+                        if (x!= 0 && tile(x-1, y) != null && tile(x, y).value() == tile(x-1, y).value() ||
+                                y!= 0 && tile(x, y-1) != null && tile(x, y).value() == tile(x, y-1).value() ||
+                                x!= size()-1 && tile(x+1, y) != null && tile(x, y).value() == tile(x+1, y).value() ||
+                                y != size()-1 && tile(x, y+1) != null && tile(x, y).value() == tile(x, y+1).value()) {
+                            return true;
+                    }
+                    }
+                }
+            }
+        }
         return false;
     }
 
