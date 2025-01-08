@@ -3,6 +3,7 @@ package adventure;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdRandom;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ public class BeeCountingStage implements AdventureStage {
             System.out.println(msg);
             int count = 0;
             int expectedSum = 0;
+            input = new ArrayList<>();
 
             while (count < 3) {
                 int currNum = SOME_NEAT_NUMBERS[StdRandom.uniform(SOME_NEAT_NUMBERS.length)];
@@ -43,7 +45,7 @@ public class BeeCountingStage implements AdventureStage {
                     }
                 }
                 System.out.println();
-                String input = this.in.readLine();
+               String input = this.in.readLine();
                 while (!AdventureUtils.isInt(input)) {
                     System.out.println("Please enter a valid integer.");
                     input = this.in.readLine();
@@ -83,7 +85,7 @@ public class BeeCountingStage implements AdventureStage {
      */
     private int sumInput() {
         int sum = 0;
-        for (int i = 0; i <= this.input.size(); i++) {
+        for (int i = 0; i <= this.input.size()-1; i++) {
             sum += Integer.parseInt(this.input.get(i));
         }
         return sum;
