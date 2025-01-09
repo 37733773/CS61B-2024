@@ -4,7 +4,7 @@ import java.util.ArrayList; // import the ArrayList class
 
 import java.util.List;
 
-public class LinkedListDeque61B<T> implements Deque61B<T>{
+public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     private class Node {
         Node prev;
@@ -57,31 +57,66 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public T removeFirst() {
-        return null;
+        if (this.isEmpty()) {
+            return null;
+        }else {
+            T returnItem = sentinel.next.item;
+            sentinel.next = sentinel.next.next;
+            sentinel.next.next.prev = sentinel;
+            size--;
+            return returnItem;
+        }
     }
 
     @Override
     public T removeLast() {
-        return null;
+        if (this.isEmpty()) {
+            return null;
+        }else {
+            T returnItem = last.item;
+            last = last.prev;
+            last.next = sentinel;
+            size--;
+            return returnItem;
+        }
     }
 
     @Override
     public T get(int index) {
-        return null;
+        Node p = sentinel.next;
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        for (int i = 0; i < index; i++) {
+            p = p.next;
+        }
+        return p.item;
     }
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        Node p = sentinel.next;
+        return helper(p, index);
     }
+
+    private T helper(Node p, int index) {
+            if (index == 0) {
+                return p.item;
+            } else {
+                return helper(p.next, index-1);
+            }
+        }
 }
