@@ -92,7 +92,8 @@ public class LinkedListDeque61BTest {
 
         lld1.addFirst(1);
         lld1.addLast(2);
-        assertThat(lld1.get(1)).isEqualTo(2);
+        lld1.addLast(2);
+        assertThat(lld1.get(2)).isEqualTo(2);
     }
 
     @Test
@@ -107,6 +108,7 @@ public class LinkedListDeque61BTest {
         assertThat(lld1.getRecursive(1)).isEqualTo(2);
     }
 
+    @Test
     public void removeFirstTest() {
         Deque61B<Integer> lld1 = new LinkedListDeque61B<>();
         assertThat(lld1.removeFirst()).isNull();
@@ -115,9 +117,12 @@ public class LinkedListDeque61BTest {
         lld1.addFirst(3);
         lld1.addFirst(4);
         lld1.addLast(5);
-        lld1.addLast(6);
         assertThat(lld1.removeFirst()).isEqualTo(4);
-        assertThat(lld1.toList()).containsExactly(3, 2, 5, 6).inOrder();
+        assertThat(lld1.toList()).containsExactly(3, 2, 5).inOrder();
+        assertThat(lld1.removeFirst()).isEqualTo(3);
+        lld1.addLast(6);
+        assertThat(lld1.toList()).containsExactly(2, 5, 6).inOrder();
+
 
     }
 

@@ -1,13 +1,16 @@
 package gh2;
 import deque.*;
 
+
 // TODO: maybe more imports
 
 //Note: This file will not compile until you complete the Deque61B implementations
 public class GuitarString {
-    /** Constants. Do not change. In case you're curious, the keyword final
+    /**
+     * Constants. Do not change. In case you're curious, the keyword final
      * means the values cannot be changed at runtime. We'll discuss this and
-     * other topics in lecture on Friday. */
+     * other topics in lecture on Friday.
+     */
     private static final int SR = 44100;      // Sampling Rate
     private static final double DECAY = .996; // energy decay factor
 
@@ -22,12 +25,8 @@ public class GuitarString {
         //       better accuracy, use the Math.round() function before casting.
         //       Your should initially fill your buffer with zeros.
         buffer = new LinkedListDeque61B<>();
-        for(int i =1 ; i <= 6; i++) {
+        for (int i = 1; i <= Math.round(SR / frequency); i++) {
             buffer.addFirst(0.0);
-        }
-        for(int i =1 ; i <= 6; i++) {
-            buffer.removeLast();
-            buffer.addFirst((double) Math.round(SR / frequency));
         }
     }
 
@@ -42,7 +41,7 @@ public class GuitarString {
         //       other. This does not mean that you need to check that the numbers
         //       are different from each other. It means you should repeatedly call
         //       Math.random() - 0.5 to generate new random numbers for each array index.
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= buffer.size(); i++) {
             buffer.removeLast();
             buffer.addFirst(Math.random() - 0.5);
         }
@@ -55,12 +54,14 @@ public class GuitarString {
         // TODO: Dequeue the front sample and enqueue a new sample that is
         //       the average of the two multiplied by the DECAY factor.
         //       **Do not call StdAudio.play().**
+        Double front = buffer.removeFirst();
+        double new_item = DECAY * 0.5 * (front + buffer.get(0));
+        buffer.addLast(new_item);
     }
 
     /* Return the double at the front of the buffer. */
     public double sample() {
-        // TODO: Return the correct thing.
-        return 0;
+        return buffer.get(0);
     }
 }
     // TODO: Remove all comments that say TODO when you're done.
