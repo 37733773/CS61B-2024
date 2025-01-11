@@ -19,22 +19,20 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public void addFirst(T x) {
+        if (size == array.length) {Resize();}
         int Position = Math.floorMod(frontPosition - 1, array.length);
         array[Position] = x;
-        if (frontPosition == 1 && lastPosition == -1) {
-            lastPosition += 1;
-        }
+        if (frontPosition == 1 && lastPosition == -1) {lastPosition += 1;}
         frontPosition -= 1;
         size++;
     }
 
     @Override
     public void addLast(T x) {
+        if (size == array.length) {Resize();}
         int Position = Math.floorMod(lastPosition + 1, array.length);
         array[Position] = x;
-        if (frontPosition == 1 && lastPosition == -1) {
-            frontPosition -= 1;
-        }
+        if (frontPosition == 1 && lastPosition == -1) {frontPosition -= 1;}
         lastPosition += 1;
         size++;
     }
@@ -68,6 +66,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         array[Position] = null;
         frontPosition += 1;
         size--;
+        if (array.length < 16 || size >= array.length / 4) {Resize();}
         return returnItem;
     }
 
@@ -78,14 +77,14 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         array[Position] = null;
         lastPosition -= 1;
         size--;
+        if (array.length < 16 || size >= array.length / 4) {Resize();}
         return returnItem;
     }
 
     @Override
     public T get(int index) {
-        if (index < 0 || index >= size) {
-            return null;
-        } else {
+        if (index < 0 || index >= size) {return null;}
+        else {
             int Position = Math.floorMod(index + frontPosition, array.length);
             return array[Position];
         }
@@ -97,12 +96,19 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
     }
 
     private void Resize() {
-        T[] newArray = (T[]) new Object[array.length * 2];
-        for (int i = 0; i < array.length; i++) {
-            int Position = Math.floorMod(frontPosition + i, array.length*2);
+        int newLength = ResizeHelper(array.length);
+        T[] newArray = (T[]) new Object[newLength];
+        for (int i = 0; i < size; i++) {
+            int Position = Math.floorMod(frontPosition + i, newLength);
             newArray[Position] = get(i);
         }
         array = newArray;
+    }
+
+    private int ResizeHelper(int length) {
+        if (size == length) { return 2*length; }
+        else if (length < 16 || size >= length / 4) {return length;}
+        else {return ResizeHelper(length/4);}
     }
 }
 
