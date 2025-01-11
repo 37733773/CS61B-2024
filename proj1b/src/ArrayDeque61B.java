@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import java.lang.Math;
-public class ArrayDeque61B<T> implements Deque61B<T>{
+public class ArrayDeque61B<T> implements Deque61B<T> {
 
     private int size;
     private T[] array;
@@ -11,44 +11,49 @@ public class ArrayDeque61B<T> implements Deque61B<T>{
     private int lastPosition;
 
     public ArrayDeque61B() {
-         size = 0;
-         array = (T[]) new Object[8];
-         frontPosition = 0;
-         lastPosition = 0;
+        size = 0;
+        array = (T[]) new Object[8];
+        frontPosition = 1;
+        lastPosition = -1;
     }
 
     @Override
     public void addFirst(T x) {
-      if (size == 0) {
-          array[0] = x;
-          frontPosition =  Math.floorMod(frontPosition-1, array.length);
-      }else {
-          array[frontPosition-1] = x;
-          frontPosition -= 1;
-      }
-      size++;
+        int Position = Math.floorMod(frontPosition - 1, array.length);
+        array[Position] = x;
+        if (frontPosition == 1 && lastPosition == -1) {
+            lastPosition += 1;
+        }
+        frontPosition -= 1;
+        size++;
     }
 
     @Override
     public void addLast(T x) {
-        if (size == 0) {
-            array[0] = x;
-            lastPosition =  Math.floorMod(lastPosition + 1, array.length);
-        }else {
-            array[lastPosition + 1] = x;
-            lastPosition += 1;
+        int Position = Math.floorMod(lastPosition + 1, array.length);
+        array[Position] = x;
+        if (frontPosition == 1 && lastPosition == -1) {
+            frontPosition -= 1;
         }
+        lastPosition += 1;
         size++;
     }
 
     @Override
     public List<T> toList() {
-        return List.of();
+        List<T> list = new ArrayList<>();
+        int x = frontPosition;
+        while (x <= lastPosition) {
+            int Position = Math.floorMod(x, array.length);
+            list.add(array[Position]);
+            x += 1;
+        }
+        return list;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -58,37 +63,46 @@ public class ArrayDeque61B<T> implements Deque61B<T>{
 
     @Override
     public T removeFirst() {
-        return null;
+        int Position = Math.floorMod(frontPosition, array.length);
+        T returnItem = array[Position];
+        array[Position] = null;
+        frontPosition += 1;
+        size--;
+        return returnItem;
     }
 
     @Override
     public T removeLast() {
-        return null;
+        int Position = Math.floorMod(lastPosition, array.length);
+        T returnItem = array[Position];
+        array[Position] = null;
+        lastPosition -= 1;
+        size--;
+        return returnItem;
     }
 
     @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
             return null;
-        }else {
-         if (index  >= size - lastPosition - 1) {
-             return array[lastPosition];
-         }else {
-             return array[index + frontPosition];
-         }
+        } else {
+            int Position = Math.floorMod(index + frontPosition, array.length);
+            return array[Position];
         }
     }
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        throw new UnsupportedOperationException("No need to implement getRecursive for proj 1b");
     }
 
     private void Resize() {
-        if (size == array.length) {
-            array = Arrays.copyOf(array, array.length + 8);
-            frontPosition = 8 - array.length ;
-            lastPosition = array.length - 8;
+        T[] newArray = (T[]) new Object[array.length * 2];
+        for (int i = 0; i < array.length; i++) {
+            int Position = Math.floorMod(frontPosition + i, array.length*2);
+            newArray[Position] = get(i);
         }
+        array = newArray;
     }
 }
+
