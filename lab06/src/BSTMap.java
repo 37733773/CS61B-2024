@@ -153,7 +153,7 @@ public class BSTMap<K extends Comparable<K>, V>  implements Map61B<K, V> {
                     node.parent.left = node.right;
                 }
                 else node.parent.right = node.right;
-                
+
             }
             else {
                 BSTNode newNode = node.left;

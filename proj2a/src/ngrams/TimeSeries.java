@@ -1,5 +1,6 @@
 package ngrams;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -30,15 +31,16 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
-        // TODO: Fill in this constructor.
+        for (int year = startYear; year <= endYear; year++){
+            this.put(year, ts.get(year));
+        }
     }
 
     /**
      *  Returns all years for this time series in ascending order.
      */
     public List<Integer> years() {
-        // TODO: Fill in this method.
-        return null;
+       return new ArrayList<Integer>(this.keySet());
     }
 
     /**
@@ -46,8 +48,11 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      *  order of years().
      */
     public List<Double> data() {
-        // TODO: Fill in this method.
-        return null;
+        ArrayList<Double> data = new ArrayList<>();
+        for (int year : years()) {
+            data.add(get(year));
+        }
+        return data;
     }
 
     /**
@@ -60,8 +65,46 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * should store the value from the TimeSeries that contains that year.
      */
     public TimeSeries plus(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries newTS = new TimeSeries();
+        if (years().isEmpty() && ts.years().isEmpty()) {
+            return newTS;
+        }else {
+            int count1 = 0;
+            int count2 = 0;
+            while (count1 < years().size() || count2 < ts.years().size()) {
+
+                if (count1 == years().size()) {
+                    int year2 = ts.years().get(count2);
+                    while (count2 < ts.years().size()) {
+                        newTS.put(year2, ts.get(year2));
+                        count2++;
+                    }
+                } else if (count2 == ts.years().size()) {
+                    int year1 = years().get(count1);
+                    while (count1 < years().size()) {
+                        newTS.put(year1, ts.get(year1));
+                        count1++;
+                    }
+
+                } else {
+                    int year1 = years().get(count1);
+                    int year2 = ts.years().get(count2);
+
+                    if (year1 > year2) {
+                        newTS.put(year2, ts.get(year2));
+                        count2++;
+                    } else if (year1 < year2) {
+                        newTS.put(year1, get(year1));
+                        count1++;
+                    } else {
+                        newTS.put(year1, get(year1)+ts.get(year2));
+                        count1++;
+                        count2++;
+                    }
+                }
+            }
+            return newTS;
+        }
     }
 
     /**
@@ -74,10 +117,18 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * If TS has a year that is not in this TimeSeries, ignore it.
      */
     public TimeSeries dividedBy(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries newTS = new TimeSeries();
+        for (int year : years()) {
+            if (!ts.years().contains(year)) {
+                throw new IllegalArgumentException();
+            } else {
+                Double Data = get(year) / ts.get(year);
+                newTS.put(year, Data);
+            }
+        }
+        return newTS;
     }
 
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
+
+
 }
