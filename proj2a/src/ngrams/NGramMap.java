@@ -3,11 +3,6 @@ package ngrams;
 import edu.princeton.cs.algs4.In;
 
 import java.util.Collection;
-import java.util.Objects;
-
-import static ngrams.TimeSeries.MAX_YEAR;
-import static ngrams.TimeSeries.MIN_YEAR;
-import static utils.Utils.SHORT_WORDS_FILE;
 
 /**
  * An object that provides utility methods for making queries on the
